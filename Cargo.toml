@@ -2,3 +2,8 @@
 name = "tinted-scheme-extractor"
 version = "0.1.0"
 edition = "2021"
+
+[dependencies]
+anyhow = "1.0.86"
+image = "0.25.1"
+palette = "0.7.6"
