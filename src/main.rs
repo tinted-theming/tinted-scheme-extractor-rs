@@ -1,7 +1,7 @@
 use anyhow::Result;
 use image::{DynamicImage, GenericImageView};
 use palette::Srgb;
-use std::path::Path;
+use std::{collections::HashMap, path::Path};
 
 const MAX_COLOR_DISTANCE: u32 = 10_000;
 
@@ -116,7 +116,14 @@ impl Color {
         let dr = c1.red as i32 - c2.red as i32;
         let dg = c1.green as i32 - c2.green as i32;
         let db = c1.blue as i32 - c2.blue as i32;
+
         (dr * dr + dg * dg + db * db) as u32
+    }
+
+    fn to_hex(self) -> String {
+        let (r, g, b) = self.value.into_components();
+
+        format!("#{:02X}{:02X}{:02X}", r, g, b)
     }
 }
 
@@ -162,22 +169,10 @@ fn load_image(path: &Path) -> DynamicImage {
     image::open(path).expect("Unable to load image")
 }
 
-fn to_hex(color: Srgb<u8>) -> String {
-    let (r, g, b) = color.into_components();
-    format!("#{:02X}{:02X}{:02X}", r, g, b)
-}
-
-fn main() -> Result<()> {
-    let image_path = Path::new("./src/assets/background.png");
-    let image = load_image(image_path);
-    let scheme_palette: Vec<Color> = find_closest_palette(&image);
-    let inverse_palette: Vec<Color> = find_closest_palette(&image)
-        .iter()
-        .map(|color| color.get_inverse())
-        .collect();
+fn create_palette_with_inverse_colors(palette: &[Color], inverse_palette: &[Color]) -> Vec<Color> {
     let mut curated_palette: Vec<Color> = Vec::new();
 
-    for color in &scheme_palette {
+    for color in palette {
         let color_inverse_opt = inverse_palette
             .iter()
             .find(|c| c.associated_pure_color.as_str() == color.associated_pure_color.as_str());
@@ -193,9 +188,88 @@ fn main() -> Result<()> {
         }
     }
 
-    let scheme_palette: Vec<String> = curated_palette.iter().map(|p| to_hex(p.value)).collect();
+    curated_palette
+}
 
-    println!("Colors: {:?}", scheme_palette);
+fn create_palette_with_color_thief_colors(
+    palette: &[Color],
+    image: DynamicImage,
+) -> Result<Vec<Color>> {
+    let img_pixels = image.to_rgba8().into_raw();
+    let color_thief_palette: Vec<Option<Color>> =
+        color_thief::get_palette(img_pixels.as_slice(), color_thief::ColorFormat::Rgba, 1, 15)?
+            .iter()
+            .map(|c| {
+                let mut matching_colors: Vec<Color> = Vec::new();
+
+                for color in palette {
+                    let rgb = Srgb::new(c.r, c.g, c.b);
+                    let attempted_color = Color::new(color.associated_pure_color, rgb);
+
+                    if attempted_color.distance < MAX_COLOR_DISTANCE {
+                        matching_colors.push(attempted_color);
+                    }
+                }
+
+                matching_colors.sort_by(|a, b| a.distance.partial_cmp(&b.distance).unwrap());
+
+                if matching_colors.is_empty() {
+                    None
+                } else {
+                    matching_colors.first().copied()
+                }
+            })
+            .collect();
+    let mut color_by_pure_color: HashMap<String, Color> = HashMap::new();
+
+    for color in &color_thief_palette
+        .into_iter()
+        .flatten()
+        .collect::<Vec<Color>>()
+    {
+        color_by_pure_color
+            .entry(color.associated_pure_color.as_str().to_string())
+            .and_modify(|e| {
+                if color.distance < e.distance {
+                    *e = *color
+                }
+            })
+            .or_insert(*color);
+    }
+
+    let mut palette_with_color_thief_colors: Vec<Color> =
+        color_by_pure_color.into_values().collect();
+
+    for color in palette {
+        if !palette_with_color_thief_colors
+            .iter()
+            .any(|c| c.associated_pure_color.as_str() == color.associated_pure_color.as_str())
+        {
+            palette_with_color_thief_colors.push(*color);
+        }
+    }
+
+    Ok(palette_with_color_thief_colors.clone())
+}
+
+fn main() -> Result<()> {
+    let image_path = Path::new("./src/assets/keyboard.png");
+    let image = load_image(image_path);
+    let scheme_palette: Vec<Color> = find_closest_palette(&image);
+    let inverse_palette: Vec<Color> = find_closest_palette(&image)
+        .iter()
+        .map(|color| color.get_inverse())
+        .collect();
+    let curated_palette = create_palette_with_inverse_colors(&scheme_palette, &inverse_palette);
+    let combined_palette = create_palette_with_color_thief_colors(&curated_palette, image)?;
+
+    println!(
+        "Colors: {:?}",
+        &combined_palette
+            .iter()
+            .map(|p| (p.to_hex(), p.associated_pure_color.as_str(), p.distance))
+            .collect::<Vec<(String, &str, u32)>>()
+    );
 
     Ok(())
 }
