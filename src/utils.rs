@@ -63,13 +63,12 @@ pub(crate) fn generate_gradient(
     darkest: Srgb<u8>,
     lightest: Srgb<u8>,
     steps: usize,
-) -> Vec<String> {
+) -> Vec<Srgb<u8>> {
     (0..steps)
         .map(|i| {
             let t = i as f32 / (steps - 1) as f32;
-            let rgb = interpolate_color(darkest, lightest, t);
 
-            format!("#{:02X}{:02X}{:02X}", rgb.red, rgb.green, rgb.blue)
+            interpolate_color(darkest, lightest, t)
         })
         .collect()
 }

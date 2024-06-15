@@ -3,6 +3,7 @@ mod utils;
 
 use palette::{rgb::Rgb, Srgb};
 use std::{collections::HashMap, fmt, path::PathBuf};
+use tinted_builder::{Color as SchemeColor, Scheme};
 
 use crate::{
     color::Color,
@@ -32,44 +33,6 @@ pub enum Variant {
 #[derive(Debug)]
 pub enum System {
     Base16,
-}
-
-#[derive(Debug)]
-pub struct Scheme {
-    pub author: String,
-    pub description: Option<String>,
-    pub name: String,
-    pub slug: String,
-    pub system: System,
-    pub variant: Variant,
-    pub palette: HashMap<String, String>,
-}
-
-impl fmt::Display for Scheme {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        writeln!(f, "author: {}", self.author)?;
-        if let Some(ref desc) = self.description {
-            writeln!(f, "description: {}", desc)?;
-        }
-        writeln!(f, "name: {}", self.name)?;
-        writeln!(f, "slug: {}", self.slug)?;
-        writeln!(f, "system: {}", self.system)?;
-        writeln!(f, "variant: {}", self.variant)?;
-        writeln!(f, "palette:")?;
-
-        let mut palette_vec: Vec<(String, String)> = self
-            .palette
-            .clone()
-            .iter()
-            .map(|(k, v)| (k.to_string(), v.to_string()))
-            .collect();
-        palette_vec.sort_by_key(|k| k.0.clone());
-
-        for (key, value) in palette_vec {
-            writeln!(f, "  {}: {}", key, value)?;
-        }
-        Ok(())
-    }
 }
 
 impl fmt::Display for System {
@@ -148,55 +111,64 @@ pub fn create_scheme_from_image(params: SchemeParams) -> Result<Scheme, Error> {
     let (background, foreground) = fix_colors(dark, light, &variant);
     let gradient = generate_gradient(Srgb::from(background), Srgb::from(foreground), 8);
 
-    let mut scheme_palette: HashMap<String, String> = HashMap::new();
+    let mut scheme_palette: HashMap<String, SchemeColor> = HashMap::new();
 
-    for (index, color_text) in gradient.iter().enumerate() {
-        scheme_palette
-            .entry(format!("base0{}", index))
-            .or_insert(color_text.to_string());
+    for (index, rgb) in gradient.iter().enumerate() {
+        scheme_palette.entry(format!("base0{}", index)).or_insert(
+            SchemeColor::new(format!("#{:02X}{:02X}{:02X}", rgb.red, rgb.green, rgb.blue))
+                .map_err(|err| Error::GenerateColors(err.to_string()))?,
+        );
     }
 
     for color in &combined_palette {
         match color.associated_pure_color.as_str() {
             "red" => {
-                scheme_palette
-                    .entry("base08".to_string())
-                    .or_insert(color.to_hex());
+                scheme_palette.entry("base08".to_string()).or_insert(
+                    SchemeColor::new(color.to_hex())
+                        .map_err(|err| Error::GenerateColors(err.to_string()))?,
+                );
             }
             "orange" => {
-                scheme_palette
-                    .entry("base09".to_string())
-                    .or_insert(color.to_hex());
+                scheme_palette.entry("base09".to_string()).or_insert(
+                    SchemeColor::new(color.to_hex())
+                        .map_err(|err| Error::GenerateColors(err.to_string()))?,
+                );
             }
             "yellow" => {
-                scheme_palette
-                    .entry("base0A".to_string())
-                    .or_insert(color.to_hex());
+                scheme_palette.entry("base0A".to_string()).or_insert(
+                    SchemeColor::new(color.to_hex())
+                        .map_err(|err| Error::GenerateColors(err.to_string()))?,
+                );
             }
             "green" => {
-                scheme_palette
-                    .entry("base0B".to_string())
-                    .or_insert(color.to_hex());
+                scheme_palette.entry("base0B".to_string()).or_insert(
+                    SchemeColor::new(color.to_hex())
+                        .map_err(|err| Error::GenerateColors(err.to_string()))?,
+                );
             }
             "cyan" => {
-                scheme_palette
-                    .entry("base0C".to_string())
-                    .or_insert(color.to_hex());
+                scheme_palette.entry("base0C".to_string()).or_insert(
+                    SchemeColor::new(color.to_hex())
+                        .map_err(|err| Error::GenerateColors(err.to_string()))?,
+                );
             }
             "blue" => {
-                scheme_palette
-                    .entry("base0D".to_string())
-                    .or_insert(color.to_hex());
+                scheme_palette.entry("base0D".to_string()).or_insert(
+                    SchemeColor::new(color.to_hex())
+                        .map_err(|err| Error::GenerateColors(err.to_string()))?,
+                );
             }
             "purple" => {
-                scheme_palette
-                    .entry("base0E".to_string())
-                    .or_insert(color.to_hex());
+                scheme_palette.entry("base0E".to_string()).or_insert(
+                    SchemeColor::new(color.to_hex())
+                        .map_err(|err| Error::GenerateColors(err.to_string()))?,
+                );
             }
             "brown" => {
-                scheme_palette
-                    .entry("base0F".to_string())
-                    .or_insert(color.to_hex());
+                scheme_palette.entry("base0F".to_string()).or_insert(
+                    SchemeColor::new(color.to_hex())
+                        .map_err(|err| Error::GenerateColors(err.to_string()))?,
+                );
             }
             _ => {}
         }
@@ -207,8 +179,8 @@ pub fn create_scheme_from_image(params: SchemeParams) -> Result<Scheme, Error> {
         description,
         name,
         slug,
-        system,
-        variant,
+        system: system.to_string(),
+        variant: variant.to_string(),
         palette: scheme_palette,
     };
 
