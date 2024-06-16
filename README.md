@@ -1,5 +1,9 @@
 # Tinted Scheme Extractor
 
+[![Matrix Chat](https://img.shields.io/matrix/tinted-theming:matrix.org)](https://matrix.to/#/#tinted-theming:matrix.org)
+[![Crates.io](https://img.shields.io/crates/v/tinted-scheme-extractor.svg)](https://crates.io/crates/tinted-scheme-extractor)
+[![LICENSE](https://img.shields.io/crates/l/tinted-scheme-extractor)](./LICENSE)
+
 `tinted-scheme-extractor` is a [Tinted Theming] Rust library which
 generates a Base16 theme based a provided image.
 
@@ -39,13 +43,6 @@ fn main() {
     println!("{}", &scheme);
 }
 ```
-
-## Changes to come
-
-- `System::Base16` is currently only supported, `System::Base24` to come
-- `Variant::Dark` is currently only supported, `Variant::Light` to come
-- I'll probably change the `image_path` input to accept data and not a
-  path
 
 ## Inspiration
 
