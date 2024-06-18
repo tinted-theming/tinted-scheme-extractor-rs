@@ -1189,9 +1189,9 @@ dependencies = [
 
 [[package]]
 name = "tinted-builder"
-version = "0.4.2"
+version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "41cd1e5c4260aaeda42b05fd682fc30fe8c539368308e212759ebb40dbb44fac"
+checksum = "cb51d1b7629f1adee37ea7680568f51fe637ad81061b8dd5df1ef76214b320ab"
 dependencies = [
  "anyhow",
  "clap",
@@ -1205,7 +1205,7 @@ dependencies = [
 
 [[package]]
 name = "tinted-scheme-extractor"
-version = "0.2.1"
+version = "0.2.2"
 dependencies = [
  "color-thief",
  "image",

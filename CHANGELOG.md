@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.2 - 2024-06-18
+
+### Fixed
+
+- Update `tinted-builder` package
+
 ## 0.2.1 - 2024-06-18
 
 ### Fixed

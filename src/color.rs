@@ -53,17 +53,25 @@ impl Color {
     }
 
     pub(crate) fn to_saturated(mut self, percentage: f32) -> Self {
-        let percentage = if percentage > 1.0 {
-            1.0
-        } else {
-            percentage
-        };
-        let rgb: Rgb = Rgb::new(self.value.red as f32 / 255.0, self.value.green as f32 / 255.0, self.value.blue as f32 / 255.0);
+        let percentage = if percentage > 1.0 { 1.0 } else { percentage };
+        let rgb: Rgb = Rgb::new(
+            self.value.red as f32 / 255.0,
+            self.value.green as f32 / 255.0,
+            self.value.blue as f32 / 255.0,
+        );
         let hsl: Hsl = Hsl::from_color(rgb);
-        let updated_saturation: Hsl = Hsl::new(hsl.hue, hsl.saturation * percentage * percentage, hsl.lightness);
+        let updated_saturation: Hsl = Hsl::new(
+            hsl.hue,
+            hsl.saturation * percentage * percentage,
+            hsl.lightness,
+        );
         let updated_rgb: Rgb = updated_saturation.into_color();
 
-        self.value = Srgb::new((updated_rgb.red * 255.0) as u8, (updated_rgb.green * 255.0) as u8, (updated_rgb.blue * 255.0) as u8);
+        self.value = Srgb::new(
+            (updated_rgb.red * 255.0) as u8,
+            (updated_rgb.green * 255.0) as u8,
+            (updated_rgb.blue * 255.0) as u8,
+        );
 
         self
     }
