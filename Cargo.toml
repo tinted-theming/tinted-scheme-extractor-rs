@@ -1,6 +1,6 @@
 [package]
 name = "tinted-scheme-extractor"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 description = "A tool to create a Tinted Theming scheme based on a provided image"
 license = "MPL-2.0"
@@ -15,4 +15,4 @@ color-thief = "0.2.2"
 image = "0.25.1"
 palette = "0.7.6"
 thiserror = "1.0.61"
-tinted-builder = "0.4.1"
+tinted-builder = "0.4.2"
