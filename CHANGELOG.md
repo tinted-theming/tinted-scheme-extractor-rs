@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0 - 2024-07-12
+
+### Fixed
+
+- Don't return hash when returning value with `.to_hex` method
+
 ## 0.2.2 - 2024-06-18
 
 ### Fixed

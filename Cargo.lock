@@ -1205,7 +1205,7 @@ dependencies = [
 
 [[package]]
 name = "tinted-scheme-extractor"
-version = "0.2.2"
+version = "0.3.0"
 dependencies = [
  "color-thief",
  "image",

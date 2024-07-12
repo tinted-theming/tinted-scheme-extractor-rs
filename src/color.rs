@@ -49,7 +49,7 @@ impl Color {
     pub(crate) fn to_hex(self) -> String {
         let (r, g, b) = self.value.into_components();
 
-        format!("#{:02X}{:02X}{:02X}", r, g, b)
+        format!("{:02X}{:02X}{:02X}", r, g, b)
     }
 
     pub(crate) fn to_saturated(mut self, percentage: f32) -> Self {
