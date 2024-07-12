@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1 - 2024-07-12
+
+### Fixed
+
+- Use latest tinted-builder which also has a `.to_hex` prefix hash fix
+
 ## 0.3.0 - 2024-07-12
 
 ### Fixed

@@ -117,7 +117,7 @@ pub fn create_scheme_from_image(params: SchemeParams) -> Result<Scheme, Error> {
 
     for (index, rgb) in gradient.iter().enumerate() {
         scheme_palette.entry(format!("base0{}", index)).or_insert(
-            SchemeColor::new(format!("#{:02X}{:02X}{:02X}", rgb.red, rgb.green, rgb.blue))
+            SchemeColor::new(format!("{:02X}{:02X}{:02X}", rgb.red, rgb.green, rgb.blue))
                 .map_err(|err| Error::GenerateColors(err.to_string()))?,
         );
     }
