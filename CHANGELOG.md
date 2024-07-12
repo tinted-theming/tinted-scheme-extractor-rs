@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.2 - 2024-07-12
+
+### Fixed
+
+- Use latest tinted-builder which wraps all printed scheme properties in
+  double quotes
+
 ## 0.3.1 - 2024-07-12
 
 ### Fixed
