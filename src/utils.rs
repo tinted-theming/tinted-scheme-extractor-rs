@@ -2,10 +2,11 @@ use std::{collections::HashMap, path::Path};
 
 use crate::{
     color::{Color, PureColor},
-    Error, Variant,
+    Error,
 };
 use image::{DynamicImage, GenericImageView};
 use palette::{rgb::Rgb, Hsl, IntoColor, Srgb, Yxy};
+use tinted_builder::SchemeVariant;
 
 const MAX_COLOR_DISTANCE: u32 = 10_000;
 
@@ -169,9 +170,9 @@ fn get_sat_luma(color: Rgb) -> (f32, f32) {
     (saturation, luma)
 }
 
-pub(crate) fn fix_colors(dark: Rgb, light: Rgb, mode: &Variant) -> (Rgb, Rgb) {
+pub(crate) fn fix_colors(dark: Rgb, light: Rgb, mode: &SchemeVariant) -> (Rgb, Rgb) {
     match mode {
-        Variant::Light => {
+        SchemeVariant::Light => {
             let mut fg = dark;
             let mut bg = light;
             // Foreground should be pretty dark and have:
@@ -207,7 +208,7 @@ pub(crate) fn fix_colors(dark: Rgb, light: Rgb, mode: &Variant) -> (Rgb, Rgb) {
             }
             (bg, fg)
         }
-        Variant::Dark => {
+        SchemeVariant::Dark => {
             let mut fg = light;
             let mut bg = dark;
             // Foreground should be light and have:
@@ -242,6 +243,8 @@ pub(crate) fn fix_colors(dark: Rgb, light: Rgb, mode: &Variant) -> (Rgb, Rgb) {
             }
             (bg, fg)
         }
+        // This case shouldn't be reachable since a check against it is done earlier
+        _ => todo!(),
     }
 }
 

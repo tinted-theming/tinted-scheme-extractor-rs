@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.4.0 - 2024-09-23
+
+### Added
+
+- Add error fallback for unsupported `SchemeVariant`
+
+### Changed
+
+- Export `System` and `Variant` variants from `tinted-builder` and
+  remove enum definitions in `tinted-scheme-extractor` crate
+
 ## 0.3.2 - 2024-07-12
 
 ### Fixed

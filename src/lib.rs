@@ -2,8 +2,8 @@ mod color;
 mod utils;
 
 use palette::{rgb::Rgb, Srgb};
-use std::{collections::HashMap, fmt, path::PathBuf};
-use tinted_builder::{Color as SchemeColor, Scheme};
+use std::{collections::HashMap, path::PathBuf};
+use tinted_builder::{Base16Scheme, Color as SchemeColor};
 
 use crate::{
     color::Color,
@@ -13,6 +13,8 @@ use crate::{
     },
 };
 
+pub use tinted_builder::{SchemeSystem, SchemeVariant};
+
 #[non_exhaustive]
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
@@ -20,38 +22,10 @@ pub enum Error {
     NoColors(String),
     #[error("generate colors")]
     GenerateColors(String),
+    #[error("unsupported scheme variant")]
+    UnsupportedSchemeVariant(String),
     #[error("other")]
     Other(String),
-}
-
-#[derive(Debug)]
-pub enum Variant {
-    Dark,
-    Light,
-}
-
-#[derive(Debug)]
-pub enum System {
-    Base16,
-    Base24,
-}
-
-impl fmt::Display for System {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            System::Base16 => write!(f, "base16"),
-            System::Base24 => write!(f, "base24"),
-        }
-    }
-}
-
-impl fmt::Display for Variant {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            Variant::Light => write!(f, "light"),
-            Variant::Dark => write!(f, "dark"),
-        }
-    }
 }
 
 #[derive(Debug)]
@@ -61,12 +35,12 @@ pub struct SchemeParams {
     pub description: Option<String>,
     pub name: String,
     pub slug: String,
-    pub system: System,
-    pub variant: Variant,
+    pub system: SchemeSystem,
+    pub variant: SchemeVariant,
     pub verbose: bool,
 }
 
-pub fn create_scheme_from_image(params: SchemeParams) -> Result<Scheme, Error> {
+pub fn create_scheme_from_image(params: SchemeParams) -> Result<Base16Scheme, Error> {
     let SchemeParams {
         image_path,
         author,
@@ -110,7 +84,10 @@ pub fn create_scheme_from_image(params: SchemeParams) -> Result<Scheme, Error> {
         .collect();
     let light = light_color(&color_thief_pallette_as_rgb_vec, verbose)?;
     let dark = dark_color(&color_thief_pallette_as_rgb_vec, verbose)?;
-    let (background, foreground) = fix_colors(dark, light, &variant);
+    let (background, foreground) = match &variant {
+        SchemeVariant::Dark | SchemeVariant::Light => Ok(fix_colors(dark, light, &variant)),
+        variant => Err(Error::UnsupportedSchemeVariant(variant.to_string())),
+    }?;
     let gradient = generate_gradient(Srgb::from(background), Srgb::from(foreground), 8);
 
     let mut scheme_palette: HashMap<String, SchemeColor> = HashMap::new();
@@ -175,7 +152,7 @@ pub fn create_scheme_from_image(params: SchemeParams) -> Result<Scheme, Error> {
             _ => {}
         }
 
-        if let System::Base24 = system {
+        if let SchemeSystem::Base24 = system {
             let updated_color = color.to_saturated(0.7);
 
             match updated_color.associated_pure_color.as_str() {
@@ -232,13 +209,13 @@ pub fn create_scheme_from_image(params: SchemeParams) -> Result<Scheme, Error> {
         }
     }
 
-    let scheme = Scheme {
+    let scheme = Base16Scheme {
         author,
         description,
         name,
         slug,
-        system: system.to_string(),
-        variant: variant.to_string(),
+        system,
+        variant,
         palette: scheme_palette,
     };
 
