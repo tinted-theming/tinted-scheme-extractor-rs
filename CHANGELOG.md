@@ -1,5 +1,21 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Add basic documentation and tests for `Color` struct
+
+### Changed
+
+- Update distance formula to more directly use the Euclidean distance
+  formula
+
+### Fixed
+
+- Add a lightness and saturation adjustment function for >= `base08` and
+  increase the lightness if the weighting is too low
+
 ## 0.5.0 - 2024-10-06
 
 ### Changed

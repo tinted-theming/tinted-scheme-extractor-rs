@@ -8,7 +8,7 @@ use image::{DynamicImage, GenericImageView};
 use palette::{rgb::Rgb, Hsl, IntoColor, Srgb, Yxy};
 use tinted_builder::SchemeVariant;
 
-const MAX_COLOR_DISTANCE: u32 = 10_000;
+const MAX_COLOR_DISTANCE: f64 = 100.0;
 
 pub(crate) fn find_closest_palette(image: &DynamicImage) -> Vec<Color> {
     let target_colors: Vec<Color> = vec![
@@ -27,7 +27,7 @@ pub(crate) fn find_closest_palette(image: &DynamicImage) -> Vec<Color> {
     ];
 
     let mut closest_colors_with_distance = target_colors.clone();
-    let mut closest_distances = [u32::MAX; 13];
+    let mut closest_distances = [f64::MAX; 13];
 
     for (_, _, pixel) in image.pixels() {
         let color = Srgb::new(pixel[0], pixel[1], pixel[2]);

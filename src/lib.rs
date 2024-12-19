@@ -1,7 +1,7 @@
 mod color;
 mod utils;
 
-use palette::{rgb::Rgb, Srgb};
+use palette::{rgb::Rgb, FromColor, Hsl, Srgb};
 use std::{collections::HashMap, path::PathBuf};
 use tinted_builder::{Base16Scheme, Color as SchemeColor};
 
@@ -100,6 +100,9 @@ pub fn create_scheme_from_image(params: SchemeParams) -> Result<Base16Scheme, Er
     }
 
     for color in &combined_palette {
+        let diff = get_lightness_weight_difference(color, 0.7);
+        let color = color.add_lightness(diff);
+
         match color.associated_pure_color.as_str() {
             "red" => {
                 scheme_palette.entry("base08".to_string()).or_insert(
@@ -220,4 +223,16 @@ pub fn create_scheme_from_image(params: SchemeParams) -> Result<Base16Scheme, Er
     };
 
     Ok(scheme)
+}
+
+fn get_lightness_weight_difference(color: &Color, threshold: f32) -> f32 {
+    let color: Hsl = Hsl::from_color(color.value.into_format::<f32>());
+    let alpha = 0.5; // Weight for saturation
+    let beta = 1.0; // Weight for lightness
+
+    let visibility_metric = alpha * color.saturation + beta * color.lightness;
+
+    let value = ((threshold - visibility_metric) / beta).clamp(0.0, 1.0);
+
+    value / 2.0
 }
