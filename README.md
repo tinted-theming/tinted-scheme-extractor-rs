@@ -17,15 +17,16 @@ Note: This is early stages so the API is subject to change.
 
 ```rust
 use std::path::PathBuf;
-use tinted_scheme_extractor::{create_scheme_from_image, SchemeParams, SchemeSystem, SchemeVariant};
+use tinted_builder::{SchemeSystem, SchemeVariant};
+use tinted_scheme_extractor::{create_scheme_from_image, SchemeParams};
 
 fn main() {
     let image_path = PathBuf::from("./path/to/file.png");
     let name = "Your scheme name".to_string();
     let slug = "your-scheme-slug".to_string();
     let description = Some("Optional description".to_string());
-    let variant = Variant::Dark;
-    let system = System::Base16;
+    let variant = SchemeVariant::Dark;
+    let system = SchemeSystem::Base16;
     let verbose = false;
     let author = "Your name".to_string();
 

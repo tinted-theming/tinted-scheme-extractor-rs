@@ -1,6 +1,12 @@
 # Changelog
 
-## Release 0.6.0
+## 0.6.1 - 2025-03-24
+
+### Fixed
+
+- Fix bug where schemes aren't generated with hashes correctly
+
+## 0.6.0 - 2024-12-20
 
 ### Added
 
