@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.8.0 - 2026-01-27
+
+### Changed
+
+- Updated `image` dep
+
+## 0.7.0 - 2026-01-27
+
+### Changed
+
+- Updated `tinted-builder` dep
+
 ## 0.6.1 - 2025-03-24
 
 ### Fixed
