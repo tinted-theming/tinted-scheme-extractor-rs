@@ -5,6 +5,7 @@ accepted = [
     "BSD-3-Clause",
     "MPL-2.0",
     "Unicode-3.0",
+    "GPL-3.0-only",
 ]
 targets = [
     "x86_64-unknown-linux-gnu",

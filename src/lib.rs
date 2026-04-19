@@ -3,7 +3,7 @@ mod utils;
 
 use palette::{rgb::Rgb, FromColor, Hsl, Srgb};
 use std::{collections::HashMap, path::PathBuf};
-use tinted_builder::{Base16Scheme, Color as SchemeColor};
+use tinted_builder::{base16::Scheme as Base16Scheme, Color as SchemeColor};
 
 use crate::{
     color::Color,
@@ -94,8 +94,12 @@ pub fn create_scheme_from_image(params: SchemeParams) -> Result<Base16Scheme, Er
 
     for (index, rgb) in gradient.iter().enumerate() {
         scheme_palette.entry(format!("base0{}", index)).or_insert(
-            SchemeColor::new(format!("{:02X}{:02X}{:02X}", rgb.red, rgb.green, rgb.blue).as_str())
-                .map_err(|err| Error::GenerateColors(err.to_string()))?,
+            SchemeColor::new(
+                format!("{:02X}{:02X}{:02X}", rgb.red, rgb.green, rgb.blue).as_str(),
+                None,
+                None,
+            )
+            .map_err(|err| Error::GenerateColors(err.to_string()))?,
         );
     }
 
@@ -106,49 +110,49 @@ pub fn create_scheme_from_image(params: SchemeParams) -> Result<Base16Scheme, Er
         match color.associated_pure_color.as_str() {
             "red" => {
                 scheme_palette.entry("base08".to_string()).or_insert(
-                    SchemeColor::new(color.to_hex().as_str())
+                    SchemeColor::new(color.to_hex().as_str(), None, None)
                         .map_err(|err| Error::GenerateColors(err.to_string()))?,
                 );
             }
             "orange" => {
                 scheme_palette.entry("base09".to_string()).or_insert(
-                    SchemeColor::new(color.to_hex().as_str())
+                    SchemeColor::new(color.to_hex().as_str(), None, None)
                         .map_err(|err| Error::GenerateColors(err.to_string()))?,
                 );
             }
             "yellow" => {
                 scheme_palette.entry("base0A".to_string()).or_insert(
-                    SchemeColor::new(color.to_hex().as_str())
+                    SchemeColor::new(color.to_hex().as_str(), None, None)
                         .map_err(|err| Error::GenerateColors(err.to_string()))?,
                 );
             }
             "green" => {
                 scheme_palette.entry("base0B".to_string()).or_insert(
-                    SchemeColor::new(color.to_hex().as_str())
+                    SchemeColor::new(color.to_hex().as_str(), None, None)
                         .map_err(|err| Error::GenerateColors(err.to_string()))?,
                 );
             }
             "cyan" => {
                 scheme_palette.entry("base0C".to_string()).or_insert(
-                    SchemeColor::new(color.to_hex().as_str())
+                    SchemeColor::new(color.to_hex().as_str(), None, None)
                         .map_err(|err| Error::GenerateColors(err.to_string()))?,
                 );
             }
             "blue" => {
                 scheme_palette.entry("base0D".to_string()).or_insert(
-                    SchemeColor::new(color.to_hex().as_str())
+                    SchemeColor::new(color.to_hex().as_str(), None, None)
                         .map_err(|err| Error::GenerateColors(err.to_string()))?,
                 );
             }
             "purple" => {
                 scheme_palette.entry("base0E".to_string()).or_insert(
-                    SchemeColor::new(color.to_hex().as_str())
+                    SchemeColor::new(color.to_hex().as_str(), None, None)
                         .map_err(|err| Error::GenerateColors(err.to_string()))?,
                 );
             }
             "brown" => {
                 scheme_palette.entry("base0F".to_string()).or_insert(
-                    SchemeColor::new(color.to_hex().as_str())
+                    SchemeColor::new(color.to_hex().as_str(), None, None)
                         .map_err(|err| Error::GenerateColors(err.to_string()))?,
                 );
             }
@@ -161,49 +165,49 @@ pub fn create_scheme_from_image(params: SchemeParams) -> Result<Base16Scheme, Er
             match updated_color.associated_pure_color.as_str() {
                 "red" => {
                     scheme_palette.entry("base10".to_string()).or_insert(
-                        SchemeColor::new(updated_color.to_hex().as_str())
+                        SchemeColor::new(updated_color.to_hex().as_str(), None, None)
                             .map_err(|err| Error::GenerateColors(err.to_string()))?,
                     );
                 }
                 "orange" => {
                     scheme_palette.entry("base11".to_string()).or_insert(
-                        SchemeColor::new(updated_color.to_hex().as_str())
+                        SchemeColor::new(updated_color.to_hex().as_str(), None, None)
                             .map_err(|err| Error::GenerateColors(err.to_string()))?,
                     );
                 }
                 "yellow" => {
                     scheme_palette.entry("base12".to_string()).or_insert(
-                        SchemeColor::new(updated_color.to_hex().as_str())
+                        SchemeColor::new(updated_color.to_hex().as_str(), None, None)
                             .map_err(|err| Error::GenerateColors(err.to_string()))?,
                     );
                 }
                 "green" => {
                     scheme_palette.entry("base13".to_string()).or_insert(
-                        SchemeColor::new(updated_color.to_hex().as_str())
+                        SchemeColor::new(updated_color.to_hex().as_str(), None, None)
                             .map_err(|err| Error::GenerateColors(err.to_string()))?,
                     );
                 }
                 "cyan" => {
                     scheme_palette.entry("base14".to_string()).or_insert(
-                        SchemeColor::new(updated_color.to_hex().as_str())
+                        SchemeColor::new(updated_color.to_hex().as_str(), None, None)
                             .map_err(|err| Error::GenerateColors(err.to_string()))?,
                     );
                 }
                 "blue" => {
                     scheme_palette.entry("base15".to_string()).or_insert(
-                        SchemeColor::new(updated_color.to_hex().as_str())
+                        SchemeColor::new(updated_color.to_hex().as_str(), None, None)
                             .map_err(|err| Error::GenerateColors(err.to_string()))?,
                     );
                 }
                 "purple" => {
                     scheme_palette.entry("base16".to_string()).or_insert(
-                        SchemeColor::new(updated_color.to_hex().as_str())
+                        SchemeColor::new(updated_color.to_hex().as_str(), None, None)
                             .map_err(|err| Error::GenerateColors(err.to_string()))?,
                     );
                 }
                 "brown" => {
                     scheme_palette.entry("base17".to_string()).or_insert(
-                        SchemeColor::new(updated_color.to_hex().as_str())
+                        SchemeColor::new(updated_color.to_hex().as_str(), None, None)
                             .map_err(|err| Error::GenerateColors(err.to_string()))?,
                     );
                 }

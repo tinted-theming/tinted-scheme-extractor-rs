@@ -1059,6 +1059,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "28d3b2b1366ec20994f1fd18c3c594f05c5dd4bc44d8bb0c1c632c8d6829481f"
 
 [[package]]
+name = "semver"
+version = "1.0.27"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d767eb0aabc880b29956c35734170f26ed551a859dbd361d140cdbeca61ab1e2"
+
+[[package]]
 name = "serde"
 version = "1.0.228"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1207,14 +1213,16 @@ dependencies = [
 
 [[package]]
 name = "tinted-builder"
-version = "0.10.0"
+version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1eaffa8073b3c7e35e2a4bee332b3d8bfe1fdcd2fd5933e92e9da09f91c6755f"
+checksum = "f5cbef934f68c8f447e7d4d112b48999ff617aafb526bcec634ba55117824bba"
 dependencies = [
  "dirs",
+ "palette",
  "quick-xml",
  "regex",
  "ribboncurls",
+ "semver",
  "serde",
  "serde_yaml",
  "thiserror 2.0.18",
@@ -1223,7 +1231,7 @@ dependencies = [
 
 [[package]]
 name = "tinted-scheme-extractor"
-version = "0.8.0"
+version = "0.9.0"
 dependencies = [
  "color-thief",
  "image",
