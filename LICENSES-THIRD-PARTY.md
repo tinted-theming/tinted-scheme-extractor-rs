@@ -3217,7 +3217,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 
 #### Used by
 
-- [tinted-builder 0.12.0](https://github.com/tinted-theming/tinted-builder-rust)
+- [tinted-builder 0.13.0](https://github.com/tinted-theming/tinted-builder-rust)
 
 ```
 GNU GENERAL PUBLIC LICENSE
@@ -4140,7 +4140,7 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 
 #### Used by
 
-- [tinted-scheme-extractor 0.10.0](https://github.com/tinted-theming/tinted-scheme-extractor-rs)
+- [tinted-scheme-extractor 0.11.0](https://github.com/tinted-theming/tinted-scheme-extractor-rs)
 
 ```
 Mozilla Public License Version 2.0

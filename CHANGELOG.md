@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.10.0 - 2026-04-20
+
+### Changed
+
+- Updated `tinted-builder` to `0.13.0`
+
 ## 0.10.0 - 2026-04-19
 
 ### Changed
