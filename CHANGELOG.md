@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Updated `tinted-builder` to `0.15.0`. The crate's API surface used here
+  (`Base16Scheme`, `Color`, `SchemeSystem`, `SchemeVariant`) is unchanged
+  across 0.13 → 0.15; the breaking changes in 0.13 (Tinted8 spec versions)
+  and 0.14 (Tinted8 ui field renames) only affect Tinted8-specific code,
+  which this crate does not use.
+
 ## 0.10.0 - 2026-04-20
 
 ### Changed
